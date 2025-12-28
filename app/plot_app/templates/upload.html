@@ -1,54 +1,47 @@
 {% include 'header.html' %}
 
 <style>
-	/* Ultra-Minimal Base Styles */
-	:root {
-		--bg: #ffffff;
-		--text: #1a1a1a;
-		--subtle: #888888;
-		--border: #e0e0e0;
-		--focus: #1a1a1a;
-		--error: #d93025;
-	}
+	/* Ultra-Minimal Base Styles - Updated for Style Guide */
+	/* We rely on main.css for :root variables */
 
 	body {
-		background-color: var(--bg);
-		color: var(--text);
-		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-		line-height: 1.6;
-		-webkit-font-smoothing: antialiased;
-		/* ADDED: Bottom padding to create space after the footer */
+		/* background and font handled by main.css */
 		padding-bottom: 5rem;
 	}
 
 	/* Layout */
 	.minimal-wrapper {
-		max-width: 500px;
+		max-width: 600px;
 		margin: 4rem auto 2rem auto;
-		/* Adjusted bottom margin */
 		padding: 0 1.5rem;
 	}
 
 	/* Typography */
 	h3 {
-		font-weight: 400;
+		font-family: var(--font-sans);
+		font-weight: 700;
 		font-size: 1.5rem;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.025em;
 		margin-bottom: 0.5rem;
+		color: var(--main);
 	}
 
 	.subtitle {
-		color: var(--subtle);
+		color: var(--muted);
 		font-size: 0.9rem;
 		margin-bottom: 3rem;
 		font-weight: 400;
 	}
 
 	.subtitle a {
-		color: var(--text);
-		text-decoration: underline;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 3px;
+		color: var(--brand);
+		text-decoration: none;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.3s;
+	}
+
+	.subtitle a:hover {
+		border-color: var(--brand);
 	}
 
 	/* Form Elements */
@@ -59,17 +52,21 @@
 
 	label {
 		display: block;
-		font-size: 0.7rem;
+		font-size: 0.75rem;
+		/* text-xs */
 		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--subtle);
+		letter-spacing: 0.05em;
+		/* tracking-wider */
+		color: var(--muted);
 		margin-bottom: 0.5rem;
 		font-weight: 600;
+		font-family: var(--font-mono);
+		/* Technical look */
 	}
 
 	.optional-tag {
 		font-weight: 400;
-		color: #bbb;
+		color: var(--subtle);
 		margin-left: 4px;
 		text-transform: lowercase;
 	}
@@ -79,70 +76,72 @@
 	.minimal-textarea {
 		width: 100%;
 		border: 1px solid var(--border);
-		background: transparent;
+		background: var(--surface);
 		padding: 12px 14px;
 		font-size: 0.95rem;
-		color: var(--text);
-		border-radius: 4px;
-		transition: border-color 0.2s ease;
+		color: var(--main);
+		border-radius: 2px;
+		/* rounded-sm */
+		transition: all 0.2s ease;
 		box-sizing: border-box;
+		font-family: var(--font-sans);
 	}
 
 	.minimal-input:focus,
 	.minimal-select:focus,
 	.minimal-textarea:focus {
 		outline: none;
-		border-color: var(--focus);
+		border-color: var(--brand);
+		background: #fff;
+		box-shadow: 0 0 0 1px var(--brand);
 	}
 
 	.minimal-textarea {
 		min-height: 80px;
 		resize: vertical;
-		font-family: inherit;
-	}
-
-	.helper {
-		font-size: 0.75rem;
-		color: #999;
-		margin-top: 0.4rem;
 	}
 
 	.info-message {
 		font-size: 0.85rem;
-		color: var(--subtle);
-		background: #f9f9f9;
+		color: var(--muted);
+		background: var(--surface);
 		padding: 1rem;
-		border-radius: 4px;
+		border-radius: 2px;
 		margin-top: 0.5rem;
 		line-height: 1.5;
+		border-left: 2px solid var(--brand);
 	}
 
 	.info-message a {
-		color: var(--text);
+		color: var(--brand);
 	}
 
 	input[type="file"] {
 		font-size: 0.85rem;
-		color: var(--subtle);
+		color: var(--muted);
+		font-family: var(--font-mono);
 	}
 
 	.btn-minimal {
-		background-color: var(--text);
+		background-color: var(--brand);
 		color: #fff;
 		border: none;
 		width: 100%;
 		padding: 14px;
 		font-size: 0.9rem;
-		font-weight: 500;
-		letter-spacing: 0.02em;
-		border-radius: 4px;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		border-radius: 2px;
 		cursor: pointer;
-		transition: opacity 0.2s, transform 0.1s;
+		transition: all 0.2s;
 		margin-top: 1rem;
 	}
 
 	.btn-minimal:hover {
-		opacity: 0.9;
+		background-color: #be123c;
+		transform: translateY(-1px);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	}
 
 	.btn-minimal:active {
@@ -151,32 +150,48 @@
 
 	/* Progress Bar */
 	.progress {
-		height: 24px !important;
-		background-color: #e9e9e9;
+		height: 4px !important;
+		/* Thin bar */
+		background-color: var(--surface);
 		margin-top: 1.5rem;
 		width: 100%;
-		border-radius: 4px;
+		border-radius: 2px;
 		overflow: hidden;
 		position: relative;
 	}
 
 	.progress-bar {
-		background-color: var(--text);
+		background-color: var(--brand);
 		height: 100%;
 		transition: width 0.3s ease;
-		color: #fff;
-		font-size: 0.75rem;
-		font-weight: 600;
-		line-height: 24px;
-		text-align: center;
-		white-space: nowrap;
+		box-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
+		/* Glow effect */
+		/* Hide text for minimal look, or style it */
+		color: transparent;
 	}
 
 	#upload-failure {
-		color: var(--error);
+		color: #ef4444;
+		/* Red-500 */
 		font-size: 0.85rem;
 		margin-top: 1rem;
 		text-align: center;
+		font-family: var(--font-mono);
+	}
+
+	.dropzone {
+		border: 2px dashed var(--border) !important;
+		background-color: var(--surface);
+		border-radius: 4px;
+		transition: all 0.3s ease;
+		padding: 2rem !important;
+		text-align: center;
+	}
+
+	.dropzone:hover,
+	.dropzone.dragover {
+		border-color: var(--brand) !important;
+		background-color: rgba(225, 29, 72, 0.05);
 	}
 </style>
 
@@ -225,7 +240,7 @@
 
 		<div class="field-group">
 			<label for="file">ULog File</label>
-			<input type="file" name="filearg" id="file" class="minimal-input" style="padding: 10px 0; border: none;">
+			<input type="file" name="filearg" id="file" class="minimal-input dropzone">
 		</div>
 
 		<div id="feedback"></div>

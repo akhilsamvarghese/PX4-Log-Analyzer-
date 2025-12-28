@@ -14,14 +14,14 @@ from config import get_db_filename, get_kml_filepath, get_overview_img_filepath
 from helper import clear_ulog_cache, get_log_filename
 
 #pylint: disable=relative-beyond-top-level
-from .common import get_jinja_env
+from .common import get_jinja_env, TornadoRequestHandlerBase
 
 EDIT_TEMPLATE = 'edit.html'
 
 #pylint: disable=abstract-method
 
 
-class EditEntryHandler(tornado.web.RequestHandler):
+class EditEntryHandler(TornadoRequestHandlerBase):
     """ Edit a log entry, with confirmation (currently only delete) """
 
     def get(self, *args, **kwargs):

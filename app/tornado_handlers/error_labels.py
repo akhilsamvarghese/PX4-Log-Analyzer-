@@ -13,8 +13,9 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'plot_
 from config import *
 from db_entry import *
 from helper import validate_log_id, validate_error_ids
+from .common import TornadoRequestHandlerBase
 
-class UpdateErrorLabelHandler(tornado.web.RequestHandler):
+class UpdateErrorLabelHandler(TornadoRequestHandlerBase):
     """ Update the error label of a flight log."""
 
     def post(self, *args, **kwargs):

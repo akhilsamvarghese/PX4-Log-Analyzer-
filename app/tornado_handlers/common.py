@@ -49,6 +49,29 @@ class TornadoRequestHandlerBase(tornado.web.RequestHandler):
         self.write(html_template.format(status_code=status_code,
                                         error_message=error_message))
 
+    def set_default_headers(self):
+        """ set default headers """
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with, content-type")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
+    def options(self):
+        """ options request """
+        # no body
+        self.set_status(204)
+        self.finish()
+
+class CORSStaticFileHandler(tornado.web.StaticFileHandler):
+    """ StaticFileHandler with CORS support """
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with, content-type")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+
+    def options(self, *args, **kwargs):
+        self.set_status(204)
+        self.finish()
+
 def generate_db_data_from_log_file(log_id, db_connection=None):
     """
     Extract necessary information from the log file and insert as an entry to

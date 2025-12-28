@@ -59,24 +59,10 @@ def get_heading_html(ulog, px4_ulog, db_data, link_to_3d_page,
     if 'sys_name' in ulog.msg_info_dict:
         sys_name = escape(ulog.msg_info_dict['sys_name']) + ' '
 
-    if link_to_3d_page is not None and \
-        any(elem.name == 'vehicle_gps_position' for elem in ulog.data_list):
-        link_to_3d = ("<a class='btn btn-outline-primary' href='"+
-                      link_to_3d_page+"'>Open 3D View</a>")
-    else:
-        link_to_3d = ''
-
-    added_links = ''
-    if additional_links is not None:
-        for label, link in additional_links:
-            added_links += ("<a class='btn btn-outline-primary' href='"+
-                            link+"'>"+label+"</a>")
-
     if title_suffix != '': title_suffix = ' - ' + title_suffix
 
     title_html = ("<table width='100%'><tr><td><h3>"+sys_name + px4_ulog.get_mav_type()+
-                  title_suffix+"</h3></td><td align='right'>" + link_to_3d +
-                  added_links+"</td></tr></table>")
+                  title_suffix+"</h3></td><td align='right'></td></tr></table>")
     if db_data.description != '':
         title_html += "<h5>"+db_data.description+"</h5>"
     return title_html

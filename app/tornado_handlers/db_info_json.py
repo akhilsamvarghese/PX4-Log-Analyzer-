@@ -16,11 +16,11 @@ from helper import get_airframe_data
 
 
 #pylint: disable=relative-beyond-top-level
-from .common import get_generated_db_data_from_log
+from .common import get_generated_db_data_from_log, TornadoRequestHandlerBase
 
 #pylint: disable=abstract-method
 
-class DBInfoHandler(tornado.web.RequestHandler):
+class DBInfoHandler(TornadoRequestHandlerBase):
     """ Get database info (JSON list of public logs) Tornado request handler """
 
     def get(self, *args, **kwargs):

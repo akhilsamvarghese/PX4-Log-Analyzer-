@@ -27,6 +27,7 @@ from tornado_handlers.db_info_json import DBInfoHandler
 from tornado_handlers.three_d import ThreeDHandler
 from tornado_handlers.radio_controller import RadioControllerHandler
 from tornado_handlers.error_labels import UpdateErrorLabelHandler
+from tornado_handlers.common import CORSStaticFileHandler
 
 from helper import set_log_id_is_filename, print_cache_info #pylint: disable=C0411
 from config import debug_print_timing, get_overview_img_filepath #pylint: disable=C0411
@@ -89,8 +90,12 @@ if args.use_xheaders: server_kwargs['use_xheaders'] = args.use_xheaders
 server_kwargs['num_procs'] = args.numprocs
 if args.address is not None: server_kwargs['address'] = args.address
 if args.host is not None: server_kwargs['host'] = args.host
-if args.allow_websocket_origin is not None:
+if args.allow_websocket_origin is None:
+    server_kwargs['allow_websocket_origin'] = ['*']
+else:
     server_kwargs['allow_websocket_origin'] = args.allow_websocket_origin
+    if '*' not in server_kwargs['allow_websocket_origin']:
+        server_kwargs['allow_websocket_origin'].append('*')
 server_kwargs['websocket_max_message_size'] = 100 * 1024 * 1024
 
 # increase the maximum upload size (default is 100MB)
@@ -124,7 +129,7 @@ extra_patterns = [
     (r'/dbinfo', DBInfoHandler),
     (r'/error_label', UpdateErrorLabelHandler),
     (r"/stats", RedirectHandler, {"url": "/plot_app?stats=1"}),
-    (r'/overview_img/(.*)', StaticFileHandler, {'path': get_overview_img_filepath()}),
+    (r'/overview_img/(.*)', CORSStaticFileHandler, {'path': get_overview_img_filepath()}),
 ]
 
 server = None

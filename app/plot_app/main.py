@@ -185,6 +185,13 @@ else:
             plots_args = GET_arguments['plots']
             if len(plots_args) == 1:
                 plots_page = str(plots_args[0], 'utf-8')
+
+        show_overview = True
+        if plots_page == 'graphs':
+            show_overview = False
+        
+        curdoc().template_variables['show_overview'] = show_overview
+
         if plots_page == 'pid_analysis':
             try:
                 link_to_main_plots = '?log='+log_id
@@ -225,12 +232,41 @@ else:
 
             link_to_3d_page = '3d?log='+log_id
             link_to_pid_analysis_page = '?plots=pid_analysis&log='+log_id
+            curdoc().template_variables['link_to_3d_page'] = link_to_3d_page
+            curdoc().template_variables['link_to_pid_analysis_page'] = link_to_pid_analysis_page
 
             try:
                 plots = generate_plots(ulog, px4_ulog, db_data, vehicle_data,
                                        link_to_3d_page, link_to_pid_analysis_page)
 
                 title = 'Aidrone Analytics - '+px4_ulog.get_mav_type()
+
+                if plots_page == 'default':
+                    # Home Page: Clear plots, add button
+                    plots = []
+                    
+                    # Create button with enhanced styling
+                    button_html = f"""
+                        <div style="text-align: center; margin-top: 10px; margin-bottom: 20px; width: 100%;">
+                            <a href="?plots=graphs&log={log_id}" class="btn btn-outline-primary" style="display: inline-block; padding: 0.8rem 8rem; border: 2px solid #e11d48; color: #e11d48; border-radius: 4px; text-decoration: none; font-size: 1.2rem; font-weight: 700; transition: all 0.2s ease;">
+                                View Graphs
+                            </a>
+                        </div>
+                    """
+                    div = Div(text=button_html, sizing_mode='stretch_width')
+                    plots.append(div)
+                
+                elif plots_page == 'graphs':
+                     # Graphs Page: Keep plots, add back button
+                     back_button_html = f"""
+                        <div style="margin-bottom: 20px;">
+                            <a href="?log={log_id}" class="btn btn-outline-secondary" style="display: inline-block; padding: 0.375rem 0.75rem; border: 1px solid #e4e4e7; color: #71717a; border-radius: 2px; text-decoration: none;">
+                                &larr; Back to Overview
+                            </a>
+                        </div>
+                    """
+                     div = Div(text=back_button_html, width=int(plot_width*0.9))
+                     plots.insert(0, column(div, width=int(plot_width*0.9)))
 
             except Exception as error:
                 # catch all errors to avoid showing a blank page. Note that if we

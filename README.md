@@ -8,7 +8,7 @@ It uses the [bokeh](http://bokeh.pydata.org) library for plotting and the
 
 Aidrone Analytics is deployed at https://analytics.aidrone.in.
 
-![Plot View](screenshots/plot_view.png)
+<!-- ![Plot View](screenshots/plot_view.png) -->
 
 ## 3D View
 ![3D View](screenshots/3d_view.gif)

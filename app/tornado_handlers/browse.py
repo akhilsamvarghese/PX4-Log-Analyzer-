@@ -18,7 +18,7 @@ from db_entry import DBData, DBDataGenerated
 from helper import flight_modes_table, get_airframe_data
 
 #pylint: disable=relative-beyond-top-level,too-many-statements
-from .common import get_jinja_env, get_generated_db_data_from_log
+from .common import get_jinja_env, get_generated_db_data_from_log, TornadoRequestHandlerBase
 
 BROWSE_TEMPLATE = 'browse.html'
 
@@ -44,7 +44,7 @@ def format_duration(seconds: int) -> str:
     return f"{s}s"
 
 #pylint: disable=abstract-method
-class BrowseDataRetrievalHandler(tornado.web.RequestHandler):
+class BrowseDataRetrievalHandler(TornadoRequestHandlerBase):
     """ Ajax data retrieval handler """
 
     def get(self, *args, **kwargs):
@@ -308,7 +308,7 @@ class DBDataJoin(DBData, DBDataGenerated):
         self.__dict__.update(source.__dict__)
 
 
-class BrowseHandler(tornado.web.RequestHandler):
+class BrowseHandler(TornadoRequestHandlerBase):
     """ Browse public log file Tornado request handler """
 
     def get(self, *args, **kwargs):

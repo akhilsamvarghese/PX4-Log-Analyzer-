@@ -1,30 +1,30 @@
 
 function restoreSetting(key) {
-	var value = localStorage.getItem(key);
-	if (value !== null) {
-		var field = $("#"+key)[0];
-		if (field.type == 'checkbox'){
-			field.checked = (value == 'true');
-		} else {
-			field.value = value;
-		}
-		console.log(key+', '+value);
-	}
+    var value = localStorage.getItem(key);
+    if (value !== null) {
+        var field = $("#" + key)[0];
+        if (field.type == 'checkbox') {
+            field.checked = (value == 'true');
+        } else {
+            field.value = value;
+        }
+        console.log(key + ', ' + value);
+    }
 }
 function saveSetting(key) {
-	var field = $("#"+key)[0];
-	if (field.type == 'checkbox'){
-		var value = field.checked;
-	} else {
-		var value = field.value;
-	}
-	localStorage.setItem(key, value);
-	console.log(key+', '+value);
+    var field = $("#" + key)[0];
+    if (field.type == 'checkbox') {
+        var value = field.checked;
+    } else {
+        var value = field.value;
+    }
+    localStorage.setItem(key, value);
+    console.log(key + ', ' + value);
 }
 
 function saveSettings() {
-	saveSetting('email');
-	saveSetting('access');
+    saveSetting('email');
+    saveSetting('access');
 }
 
 function updateAccess() {
@@ -32,11 +32,11 @@ function updateAccess() {
     var ids = ["flightreport", "personal"];
     ids.forEach((value) => {
         if (value == access) {
-            document.getElementById(value).style.display='table-row';
+            document.getElementById(value).style.display = 'table-row';
         } else {
-            document.getElementById(value).style.display='none';
+            document.getElementById(value).style.display = 'none';
         }
-        });
+    });
     document.getElementById('public').value = access == "flightreport" ? "true" : "false";
 }
 
@@ -71,10 +71,23 @@ function validateForm() {
 }
 
 
-$(function() { // on startup
-	restoreSetting('email');
-	restoreSetting('access');
-	updateAccess();
+$(function () { // on startup
+    restoreSetting('email');
+    restoreSetting('access');
+    updateAccess();
+
+    // Drag and drop styling
+    var dropzone = $('.dropzone');
+    dropzone.on('dragover', function (e) {
+        // e.preventDefault(); // Let the browser handle the dragover for file input
+        // e.stopPropagation();
+        $(this).addClass('dragover');
+    });
+    dropzone.on('dragleave drop', function (e) {
+        // e.preventDefault();
+        // e.stopPropagation();
+        $(this).removeClass('dragover');
+    });
 
     // Ajax file upload with progress updates
     $("#upload-form").on('submit', function (e) {

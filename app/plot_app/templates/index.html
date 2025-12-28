@@ -1,48 +1,66 @@
 {% include 'header.html' %}
 
 <div class="row">
-  <div class="col-lg-8 mx-auto">
+  <div class="col-lg-12 mx-auto">
 
     {% if not internal_error %}
 
 
+    {% if show_overview %}
     {{ title_html }}
     {{ hardfault_html }}
-    {{ info_table_html }}
-    {{ corrupt_log_html }}
-    {{ error_labels_html }}
 
-    {% if has_position_data %}
+    <div class="row">
+      <div class="col-lg-6">
+        {{ info_table_html }}
+        {{ corrupt_log_html }}
+        {{ error_labels_html }}
+      </div>
 
-    <!-- Leaflet map plot -->
-    <div id="mapid"></div>
+      <div class="col-lg-6">
+        {% if has_position_data %}
 
-    <script>
-      var pos_datas = {{ pos_datas }}; // list of [lat, lon] coordinates
-      var pos_flight_modes = {{ pos_flight_modes }}; // list of [color, index of pos_datas]
-      var waypoint_bounds = [];
+        <!-- Leaflet map plot -->
+        <div id="mapid"></div>
 
-      var mymap = L.map('mapid').setView([pos_datas[0][0], pos_datas[0][1]], 15);
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.satellite',
-        accessToken: '{{ mapbox_api_access_token }}'
-      }).addTo(mymap);
+        <script>
+          var pos_datas = {{ pos_datas }}; // list of [lat, lon] coordinates
+          var pos_flight_modes = {{ pos_flight_modes }}; // list of [color, index of pos_datas]
+          var waypoint_bounds = [];
 
-      for (var j = 0; j < pos_flight_modes.length - 1; j++) {
-        var offset = -1;
-        if (pos_flight_modes[j][1] == 0)
-          offset = 0;
-        var waypoint_polyline = pos_datas.slice(pos_flight_modes[j][1] + offset, pos_flight_modes[j + 1][1]);
-        var cur_flight_color = pos_flight_modes[j][0];
-        var polyline = L.polyline(waypoint_polyline, { color: cur_flight_color }).addTo(mymap);
-        Array.prototype.push.apply(waypoint_bounds, waypoint_polyline);
-      }
+          var mymap = L.map('mapid').setView([pos_datas[0][0], pos_datas[0][1]], 15);
+          L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox.satellite',
+            accessToken: '{{ mapbox_api_access_token }}'
+          }).addTo(mymap);
 
-      mymap.fitBounds(pos_datas);
+          for (var j = 0; j < pos_flight_modes.length - 1; j++) {
+            var offset = -1;
+            if (pos_flight_modes[j][1] == 0)
+              offset = 0;
+            var waypoint_polyline = pos_datas.slice(pos_flight_modes[j][1] + offset, pos_flight_modes[j + 1][1]);
+            var cur_flight_color = pos_flight_modes[j][0];
+            var polyline = L.polyline(waypoint_polyline, { color: cur_flight_color }).addTo(mymap);
+            Array.prototype.push.apply(waypoint_bounds, waypoint_polyline);
+          }
 
-    </script>
+          mymap.fitBounds(pos_datas);
 
+        </script>
+
+        {% endif %}
+
+        <div style="margin-top: 10px; text-align: right;">
+          {% if has_position_data %}
+          <a href="{{ link_to_3d_page }}" class="btn btn-primary"
+            style="background-color: #e11d48; border-color: #e11d48;">Open 3D View</a>
+          {% endif %}
+          <a href="{{ link_to_pid_analysis_page }}" class="btn btn-primary"
+            style="background-color: #e11d48; border-color: #e11d48;">Open PID Analysis</a>
+        </div>
+      </div>
+    </div>
     {% endif %}
 
     {% if is_plot_page %}
